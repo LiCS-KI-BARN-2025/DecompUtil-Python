@@ -1,2 +1,45 @@
+# Build directories
 build/
+_build/
+dist/
+*.egg-info/
+
+# C++ artifacts
+*.o
+*.so
+*.a
+*.out
+*.dylib
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.env
+.venv
+.venv/
+venv/
+ENV/
+env/
+.tox/
+
+# IDE and editors
+.idea/
+.vscode/
 *.swp
+*.swo
+*~
+.DS_Store
+*.sublime-workspace
+*.sublime-project
+
+# Testing
+test-output/
+output.svg
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt

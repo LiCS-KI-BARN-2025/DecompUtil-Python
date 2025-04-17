@@ -1,4 +1,4 @@
-# MRSL Decomputil Library v1.0
+# Python Bindings to MRSL Decomputil Library v1.0
 [![wercker status](https://app.wercker.com/status/89a66f8c94c00db95dc056bae099adb3/s/master "wercker status")](https://app.wercker.com/project/byKey/89a66f8c94c00db95dc056bae099adb3)
 - - -
 A header only c++ library for fast convex decomposition. In the basic pipeline, it implements ellipsoid based regional inflation to model free space from a given path inside a point cloud.
@@ -30,6 +30,55 @@ To link this lib properly, add following in the `CMakeLists.txt`
 find_package(decomp_util REQUIRED)
 include_directories(${DECOMP_UTIL_INCLUDE_DIRS})
 ```
+
+## Python Bindings
+Python bindings are provided using pybind11. To install:
+
+```bash
+# Create and activate virtual environment (recommended)
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install using pip
+pip install .
+```
+
+### Python Example Usage
+The package provides Python equivalents for all C++ classes. Basic usage:
+
+```python
+import numpy as np
+from pydecomp_util import *
+
+# Create obstacles
+obs = np.array([
+    [-0.2, 1.5],
+    [1.0, 0.0],
+    [0.8, -1.0],
+    [-0.5, -0.5]
+], dtype=np.float64)
+
+# Example with LineSegment2D
+line = LineSegment2D(np.array([-1.5, 0.0]), np.array([1.5, 0.3]))
+line.set_obs(obs)
+line.set_local_bbox(np.array([2.0, 2.0]))
+line.dilate(0.0)
+
+# Example with SeedDecomp2D
+decomp = SeedDecomp2D()
+decomp.set_obs(obs)
+decomp.set_local_bbox(np.array([2.0, 2.0]))
+decomp.dilate(0.1)
+
+# Example with EllipsoidDecomp2D
+ellip_decomp = EllipsoidDecomp2D()
+path = np.array([[1.0, 1.0], [0.0, 0.0], [-1.0, 1.0]])
+ellip_decomp.set_obs(obs)
+ellip_decomp.set_local_bbox(np.array([2.0, 2.0]))
+ellip_decomp.dilate(path, 0.0)
+```
+
+Complete examples with visualization can be found in the `examples/` directory.
 
 ## Examples
 The examples of using `SeedDecomp2D`, `LineSegment2D`, `EllipsoidDecomp2D` and

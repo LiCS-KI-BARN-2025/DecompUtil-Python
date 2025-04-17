@@ -19,6 +19,8 @@ class DecompBase {
   public:
     ///Null constructor
     DecompBase() {}
+    ///Virtual destructor
+    virtual ~DecompBase() {}
     /**
      * @brief Adding local bounding box around line seg
      * @param Dim Distance in corresponding axis

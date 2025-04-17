@@ -1,16 +1,33 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(decomp_util)
 
 # set default build type
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wno-deprecated-declarations")
 
 set(BUILD_SHARED_LIBS ON)
 
+# Find required packages
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system filesystem)
 find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIRS} include)
+
+# Add pybind11
+include(FetchContent)
+FetchContent_Declare(
+  pybind11
+  GIT_REPOSITORY https://github.com/pybind/pybind11.git
+  GIT_TAG        v2.11.1
+)
+FetchContent_MakeAvailable(pybind11)
+
+include_directories(
+  ${EIGEN3_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+  include
+)
 
 include(CTest)
 
@@ -29,6 +46,10 @@ add_test(test_ellipsoid_decomp test_ellipsoid_decomp ${CMAKE_SOURCE_DIR}/data/ob
 add_executable(test_iterative_decomp test/test_iterative_decomp.cpp)
 target_link_libraries(test_iterative_decomp ${Boost_LIBRARIES})
 add_test(test_iterative_decomp test_iterative_decomp ${CMAKE_SOURCE_DIR}/data/obstacles.txt)
+
+# Python bindings
+pybind11_add_module(pydecomp_util src/python_bindings.cpp)
+target_link_libraries(pydecomp_util PRIVATE Eigen3::Eigen)
 
 install(FILES "${PROJECT_NAME}Config.cmake" "${PROJECT_NAME}ConfigVersion.cmake"
   DESTINATION "share/${PROJECT_NAME}/cmake")

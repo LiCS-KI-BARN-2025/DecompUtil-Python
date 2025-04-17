@@ -16,6 +16,11 @@
 template <int Dim>
 class LineSegment : public DecompBase<Dim> {
   public:
+    using DecompBase<Dim>::obs_;
+    using DecompBase<Dim>::ellipsoid_;
+    using DecompBase<Dim>::polyhedron_;
+    using DecompBase<Dim>::local_bbox_;
+
     ///Simple constructor
     LineSegment() {};
     /**
